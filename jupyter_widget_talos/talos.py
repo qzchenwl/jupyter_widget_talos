@@ -16,6 +16,8 @@ class TalosWidget(widgets.DOMWidget):
 
     def __init__(self, engine, dsn, sql, **kwargs):
         super(TalosWidget, self).__init__(**kwargs)
+
+        self.finished = False
         self.client = AsyncTalosClient(username=os.environ['TALOS_USERNAME'], password=os.environ['TALOS_PASSWORD'])
         self.client.open_session()
         self.qid = self.client.submit(engine=engine, dsn=dsn, statement=sql)
@@ -24,12 +26,13 @@ class TalosWidget(widgets.DOMWidget):
         self.on_msg(self._handle_custom_msg)
 
     def _handle_custom_msg(self, content, buffers):
-        if 'event' in content and content['event'] == 'ping':
+        if 'event' in content and content['event'] == 'ping' and not self.finished:
             self.info = self.client.get_query_info(self.qid)
 
             status = self.info['status']
 
             if (status == 'FINISHED'):
+                self.finished = True
                 self.result = self.client.fetch_all(self.qid)
                 self.preview = {
                     'headers': list(map(lambda c: c['name'], self.result['columns'])),
