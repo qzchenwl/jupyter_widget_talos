@@ -37,6 +37,7 @@ var TalosView = widgets.DOMWidgetView.extend({
                             overflow: auto;
                             border: solid lightgray 1px;
                             margin: 5px 0;
+                            padding: 5px;
                         }
                     </style>
 
@@ -97,11 +98,13 @@ var TalosView = widgets.DOMWidgetView.extend({
     var table = tag('table');
     var thead = tag('thead');
     var tbody = tag('tbody');
+    var caption = tag('caption');
 
+    var caption_html = caption('Full result stored in vairable <strong>_.result</strong>');
     var headers_html = thead(tr(headers.map(x => th(x)).join('\n')));
     var rows_html = tbody(rows.map(row => tr(row.map(cell => td(cell)).join('\n'))).join('\n'));
     console.log(table(headers_html + rows_html));
-    this.$el.find('.preview').html(table(headers_html + rows_html));
+    this.$el.find('.preview').html(table(caption_html + headers_html + rows_html));
   },
 
   _ping: function() {
