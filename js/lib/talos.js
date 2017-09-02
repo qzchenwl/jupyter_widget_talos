@@ -7,6 +7,10 @@ var TalosView = widgets.DOMWidgetView.extend({
     var html = `
                 <div class='TalosView'>
                     <style>
+                        .TalosView .preview table {
+                            min-width: 300px;
+                        }
+
                         .TalosView td, th {
                             padding: 5px;
                             border-left: 1px solid #e0e0e0;
@@ -112,7 +116,6 @@ var TalosView = widgets.DOMWidgetView.extend({
       return;
     }
 
-    console.log('send ping');
     this.send({'event': 'ping'});
     setTimeout(this._ping, 2000);
   }
