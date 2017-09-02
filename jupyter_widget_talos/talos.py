@@ -2,6 +2,7 @@ from __future__ import print_function
 from pytalos.client import AsyncTalosClient
 from traitlets import Unicode, Dict
 import ipywidgets as widgets
+import pandas as pd
 import os
 
 @widgets.register
@@ -33,11 +34,17 @@ class TalosWidget(widgets.DOMWidget):
 
             if (status == 'FINISHED'):
                 self.finished = True
-                self.result = self.client.fetch_all(self.qid)
+
+                result  = self.client.fetch_all(self.qid)
+                data    = result['data']
+                headers = list(map(lambda c: c['name'], result['columns']))
+
                 self.preview = {
-                    'headers': list(map(lambda c: c['name'], self.result['columns'])),
-                    'rows': self.result['data'][0:10]
+                    'headers': headers,
+                    'rows': data[0:10]
                 }
+
+                self.result = pd.DataFrame(data=data, columns=headers)
 
             elif status in ['ERROR', 'FAILED', 'KILLED']:
                 self.preview = {

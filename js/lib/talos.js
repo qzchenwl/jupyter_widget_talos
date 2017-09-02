@@ -50,8 +50,10 @@ var TalosView = widgets.DOMWidgetView.extend({
                         QID: <span class='qid'></span>
                     </div>
                     <pre class='engine-log'>
+                        Loading...
                     </pre>
                     <div class='preview'>
+                        Loading...
                     </div>
                 </div>
             `;
