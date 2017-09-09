@@ -15,6 +15,7 @@ class TalosWidget(widgets.DOMWidget):
     info = Dict().tag(sync=True)
     preview = Dict().tag(sync=True)
 
+
     def __init__(self, engine, dsn, sql, **kwargs):
         super(TalosWidget, self).__init__(**kwargs)
 
@@ -26,29 +27,40 @@ class TalosWidget(widgets.DOMWidget):
 
         self.on_msg(self._handle_custom_msg)
 
+
     def _handle_custom_msg(self, content, buffers):
-        if 'event' in content and content['event'] == 'ping' and not self.finished:
-            self.info = self.client.get_query_info(self.qid)
+        if 'event' in content and content['event'] == 'ping':
+            return self.update()
 
-            status = self.info['status']
 
-            if (status == 'FINISHED'):
-                self.finished = True
+    def update(self):
+        if self.finished:
+            return False
 
-                result  = self.client.fetch_all(self.qid)
-                data    = result['data']
-                headers = list(map(lambda c: c['name'], result['columns']))
+        self.info = self.client.get_query_info(self.qid)
 
-                self.preview = {
-                    'headers': headers,
-                    'rows': data[0:10]
-                }
+        status = self.info['status']
 
-                self.result = pd.DataFrame(data=data, columns=headers)
+        if (status == 'FINISHED'):
+            self.finished = True
 
-            elif status in ['ERROR', 'FAILED', 'KILLED']:
-                self.preview = {
-                    'headers': ['[' + status + ']'],
-                    'rows': [[self.info['message']]]
-                }
+            result  = self.client.fetch_all(self.qid)
+            data    = result['data']
+            headers = list(map(lambda c: c['name'], result['columns']))
+
+            self.preview = {
+                'headers': headers,
+                'rows': data[0:10]
+            }
+
+            self.result = pd.DataFrame(data=data, columns=headers)
+
+        elif status in ['ERROR', 'FAILED', 'KILLED']:
+            self.finished = True
+            self.preview = {
+                'headers': ['[' + status + ']'],
+                'rows': [[self.info['message']]]
+            }
+
+        return True
 
