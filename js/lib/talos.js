@@ -63,12 +63,12 @@ var TalosView = widgets.DOMWidgetView.extend({
     this.model.on('change:qid'     , this._qid_changed     , this);
     this.model.on('change:info'    , this._info_changed    , this);
     this.model.on('change:preview' , this._preview_changed , this);
+    this.model.on('change:finished', this._finished_changed, this);
 
     this._qid_changed();
     this._info_changed();
     this._preview_changed();
 
-    this._stop = false;
     this._ping = this._ping.bind(this);
 
     if (this.model.get('auto_update')) {
@@ -81,7 +81,7 @@ var TalosView = widgets.DOMWidgetView.extend({
   },
 
   _handle_stop: function() {
-    this._stop = true;
+    this.model.set('finished', true);
   },
 
   _qid_changed: function() {
@@ -117,8 +117,12 @@ var TalosView = widgets.DOMWidgetView.extend({
     this.$el.find('.preview').html(table(caption_html + headers_html + rows_html));
   },
 
+  _finished_changed: function() {
+    this.$el.find('button.stop')[0].disabled = this.model.get('finished');
+  }
+
   _ping: function() {
-    if (this._stop || Object.keys(this.model.get('preview')).length > 0) {
+    if (this.model.get('finished') || Object.keys(this.model.get('preview')).length > 0) {
       return;
     }
 

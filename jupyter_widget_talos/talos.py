@@ -12,6 +12,7 @@ class TalosWidget(widgets.DOMWidget):
     _view_module = Unicode('jupyter_widget_talos').tag(sync=True)
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
 
+    finished = Bool(False).tag(sync=True)
     auto_update = Bool(True).tag(sync=True)
     qid = Unicode().tag(sync=True)
     info = Dict().tag(sync=True)
