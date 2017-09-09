@@ -86,7 +86,9 @@ var TalosView = widgets.DOMWidgetView.extend({
   },
 
   _info_changed: function() {
-    this.$el.find('.engine-log').text(this.model.get('info')['engine_log']);
+    var el = this.$el.find('.engine-log')[0];
+    el.innerText = this.model.get('info')['engine_log'];
+    el.scrollTop = el.scrollHeight;
   },
 
   _preview_changed: function() {
@@ -118,7 +120,7 @@ var TalosView = widgets.DOMWidgetView.extend({
     }
 
     this.send({'event': 'ping'});
-    setTimeout(this._ping, 2000);
+    setTimeout(this._ping, 1000);
   }
 });
 
