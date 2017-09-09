@@ -1,6 +1,6 @@
 from __future__ import print_function
 from pytalos.client import AsyncTalosClient
-from traitlets import Unicode, Dict
+from traitlets import Unicode, Dict, Bool
 import ipywidgets as widgets
 import pandas as pd
 import os
@@ -11,15 +11,18 @@ class TalosWidget(widgets.DOMWidget):
     _view_name = Unicode('TalosView').tag(sync=True)
     _view_module = Unicode('jupyter_widget_talos').tag(sync=True)
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
+
+    auto_update = Bool(True).tag(sync=True)
     qid = Unicode().tag(sync=True)
     info = Dict().tag(sync=True)
     preview = Dict().tag(sync=True)
 
 
-    def __init__(self, engine, dsn, sql, **kwargs):
+    def __init__(self, engine, dsn, sql, auto_update=True, **kwargs):
         super(TalosWidget, self).__init__(**kwargs)
 
         self.finished = False
+        self.auto_update = auto_update
         self.client = AsyncTalosClient(username=os.environ['TALOS_USERNAME'], password=os.environ['TALOS_PASSWORD'])
         self.client.open_session()
         self.qid = self.client.submit(engine=engine, dsn=dsn, statement=sql)

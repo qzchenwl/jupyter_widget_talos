@@ -70,7 +70,10 @@ var TalosView = widgets.DOMWidgetView.extend({
 
     this._stop = false;
     this._ping = this._ping.bind(this);
-    this._ping();
+
+    if (this.model.get('auto_update')) {
+        this._ping();
+    }
   },
 
   events: {
