@@ -9,23 +9,19 @@ var TalosView = widgets.DOMWidgetView.extend({
                     <style>
                         .TalosView .preview table {
                             min-width: 300px;
+                            font-size: 12px;
                         }
 
                         .TalosView td, th {
                             padding: 5px;
-                            border-left: 1px solid #e0e0e0;
                         }
 
-                        .TalosView tr {
-                            background-color: #fafafa;
+                        .TalosView tbody tr:nth-child(odd) {
+                            background-color: #f5f5f5;
                         }
 
-                        .TalosView tr:nth-child(even) {
-                            background-color: #f0f0f0;
-                        }
-
-                        .TalosView th {
-                            background-color: #ededed;
+                        .TalosView thead {
+                            border-bottom: 1px solid black;
                         }
 
                         .TalosView .engine-log {
@@ -115,7 +111,7 @@ var TalosView = widgets.DOMWidgetView.extend({
     var caption_html = caption('Full result stored in vairable <strong>_.result</strong>');
     var headers_html = thead(tr(headers.map(x => th(x)).join('\n')));
     var rows_html = tbody(rows.map(row => tr(row.map(cell => td(cell)).join('\n'))).join('\n'));
-    this.$el.find('.preview').html(table(caption_html + headers_html + rows_html));
+    this.$el.html(table(caption_html + headers_html + rows_html));
   },
 
   _finished_changed: function() {
