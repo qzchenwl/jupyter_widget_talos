@@ -54,7 +54,7 @@ class TalosWidget(widgets.DOMWidget):
 
             self.preview = {
                 'headers': headers,
-                'rows': data[0:10]
+                'rows': data[0:5]
             }
 
             self.result = pd.DataFrame(data=data, columns=headers)

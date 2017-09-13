@@ -7,21 +7,40 @@ var TalosView = widgets.DOMWidgetView.extend({
     var html = `
                 <div class='TalosView'>
                     <style>
-                        .TalosView .preview table {
+                        .TalosView .display table {
                             min-width: 300px;
                             font-size: 12px;
                         }
 
                         .TalosView td, th {
                             padding: 5px;
+                            text-align: right;
+                            vertical-align: middle;
+                            padding: 0.5em 0.5em;
+                            line-height: normal;
+                            white-space: normal;
+                            max-width: none;
+                            border: none;
                         }
 
                         .TalosView tbody tr:nth-child(odd) {
                             background-color: #f5f5f5;
                         }
 
+                        .TalosView tbody tr:hover {
+                            background: rgba(66, 165, 245, 0.2);
+                        }
+
                         .TalosView thead {
                             border-bottom: 1px solid black;
+                        }
+
+                        .TalosView tfoot {
+                            border-top: 1px solid black;
+                        }
+
+                        .TalosView tfoot td {
+                            text-align: center;
                         }
 
                         .TalosView .engine-log {
@@ -40,16 +59,17 @@ var TalosView = widgets.DOMWidgetView.extend({
                             padding: 5px;
                         }
                     </style>
-
-                    <div class='control'>
-                        <button class='stop'>停止执行</button>
-                        QID: <span class='qid'></span>
-                    </div>
-                    <pre class='engine-log'>
-                        Loading...
-                    </pre>
-                    <div class='preview'>
-                        Loading...
+                    <div class='display'>
+                        <div class='control'>
+                            <button class='stop'>停止执行</button>
+                            QID: <span class='qid'></span>
+                        </div>
+                        <pre class='engine-log'>
+                            加载中...
+                        </pre>
+                        <div class='preview'>
+                            加载中...
+                        </div>
                     </div>
                 </div>
             `;
@@ -106,12 +126,12 @@ var TalosView = widgets.DOMWidgetView.extend({
     var table = tag('table');
     var thead = tag('thead');
     var tbody = tag('tbody');
-    var caption = tag('caption');
+    var tfoot = tag('tfoot');
 
-    var caption_html = caption('Full result stored in vairable <strong>_.result</strong>');
-    var headers_html = thead(tr(headers.map(x => th(x)).join('\n')));
-    var rows_html = tbody(rows.map(row => tr(row.map(cell => td(cell)).join('\n'))).join('\n'));
-    this.$el.html(table(caption_html + headers_html + rows_html));
+    var tfoot_html = tfoot(`<tr><td colspan='${headers.length}'>完整结果存在变量 <strong>_.result</strong> 里</td></tr>`);
+    var thead_html = thead(tr(headers.map(x => th(x)).join('\n')));
+    var tbody_html = tbody(rows.map(row => tr(row.map(cell => td(cell)).join('\n'))).join('\n'));
+    this.$el.find('.display').html(table(thead_html + tbody_html + tfoot_html));
   },
 
   _finished_changed: function() {
