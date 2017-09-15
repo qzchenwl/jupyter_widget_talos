@@ -1,5 +1,5 @@
 {
-  "name": "jupyterlab-leaflet",
+  "name": "jupyterlab_widget_talos",
   "version": "0.1.0",
   "description": "JupyterLab Bridge",
   "author": "qzchenwl",
@@ -13,9 +13,10 @@
   },
   "dependencies": {
     "@jupyter-widgets/jupyterlab-manager": "^0.27.0",
-    "jupyter_widget_talos": "^0.1.0"
+    "jupyter_widget_talos": "file:/home/jovyan/.local/share/jupyter_widget_talos/js"
   },
   "jupyterlab": {
     "extension": true
   }
 }
+
