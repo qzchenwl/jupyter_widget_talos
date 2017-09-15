@@ -61,10 +61,6 @@ class TalosWidget(widgets.DOMWidget):
 
         elif status in ['ERROR', 'FAILED', 'KILLED']:
             self.finished = True
-            self.preview = {
-                'headers': ['[' + status + ']'],
-                'rows': [[self.info['message']]]
-            }
 
         return True
 

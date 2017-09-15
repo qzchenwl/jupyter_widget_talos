@@ -8,6 +8,7 @@ var TalosView = widgets.DOMWidgetView.extend({
                 <div class='TalosView'>
                     <style>
                         .TalosView .display table {
+                            overflow: auto;
                             min-width: 300px;
                             font-size: 12px;
                         }
@@ -53,7 +54,6 @@ var TalosView = widgets.DOMWidgetView.extend({
                         }
 
                         .TalosView .preview {
-                            overflow: auto;
                             border: solid lightgray 1px;
                             margin: 5px 0;
                             padding: 5px;
@@ -139,7 +139,7 @@ var TalosView = widgets.DOMWidgetView.extend({
   },
 
   _ping: function() {
-    if (this.model.get('finished') || Object.keys(this.model.get('preview')).length > 0) {
+    if (this.model.get('finished')) {
       return;
     }
 
