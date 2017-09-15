@@ -7,8 +7,11 @@ var TalosView = widgets.DOMWidgetView.extend({
     var html = `
                 <div class='TalosView'>
                     <style>
-                        .TalosView .display table {
+                        .TalosView .display {
                             overflow: auto;
+                        }
+
+                        .TalosView .display table {
                             min-width: 300px;
                             font-size: 12px;
                         }
